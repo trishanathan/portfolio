@@ -1,0 +1,38 @@
+[
+  {
+    "src": "/assets/gallery/Amir Khan.png",
+    "alt": "Prakash Nathan with Aamir Khan",
+    "title": "Aamir Khan & Prakash Nathan",
+    "subtitle": "Global Cinema & Studio Partnerships"
+  },
+  {
+    "src": "/assets/gallery/Sachin Tendulkar.png",
+    "alt": "Prakash Nathan with Sachin Tendulkar",
+    "title": "Sachin Tendulkar & Prakash Nathan",
+    "subtitle": "Enterprise & Iconic Industry Leaders"
+  },
+  {
+    "src": "/assets/gallery/Rajkumar Hirani.png",
+    "alt": "Prakash Nathan with Rajkumar Hirani",
+    "title": "Rajkumar Hirani & Prakash Nathan",
+    "subtitle": "Blockbuster Content Lifecycle"
+  },
+  {
+    "src": "/assets/gallery/Abhishek Kapoor.png",
+    "alt": "Prakash Nathan with Abhishek Kapoor",
+    "title": "Abhishek Kapoor & Prakash Nathan",
+    "subtitle": "Creative Incubation & Distribution"
+  },
+  {
+    "src": "/assets/gallery/Aditi Rao Hydari.png",
+    "alt": "Prakash Nathan with Aditi Rao Hydari",
+    "title": "Aditi Rao Hydari & Prakash Nathan",
+    "subtitle": "Entertainment & Talent Alliances"
+  },
+  {
+    "src": "/assets/gallery/cii event.jpeg",
+    "alt": "Prakash Nathan at CII Event",
+    "title": "CII Leadership Forum",
+    "subtitle": "Keynote & Strategic Advisory"
+  }
+]

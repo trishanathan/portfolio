@@ -1,49 +1,10 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CoverflowCarousel, type CoverflowSlide } from "@/components/ui/coverflow-carousel";
 import ProfilePortraitCard from "@/components/ProfilePortraitCard";
-
-/* ── Gallery Slides for Coverflow Carousel ── */
-const GALLERY_SLIDES: CoverflowSlide[] = [
-  {
-    src: "/assets/gallery/Amir Khan.png",
-    alt: "Prakash Nathan with Aamir Khan",
-    title: "Aamir Khan & Prakash Nathan",
-    subtitle: "Global Cinema & Studio Partnerships",
-  },
-  {
-    src: "/assets/gallery/Sachin Tendulkar.png",
-    alt: "Prakash Nathan with Sachin Tendulkar",
-    title: "Sachin Tendulkar & Prakash Nathan",
-    subtitle: "Enterprise & Iconic Industry Leaders",
-  },
-  {
-    src: "/assets/gallery/Rajkumar Hirani.png",
-    alt: "Prakash Nathan with Rajkumar Hirani",
-    title: "Rajkumar Hirani & Prakash Nathan",
-    subtitle: "Blockbuster Content Lifecycle",
-  },
-  {
-    src: "/assets/gallery/Abhishek Kapoor.png",
-    alt: "Prakash Nathan with Abhishek Kapoor",
-    title: "Abhishek Kapoor & Prakash Nathan",
-    subtitle: "Creative Incubation & Distribution",
-  },
-  {
-    src: "/assets/gallery/Aditi Rao Hydari.png",
-    alt: "Prakash Nathan with Aditi Rao Hydari",
-    title: "Aditi Rao Hydari & Prakash Nathan",
-    subtitle: "Entertainment & Talent Alliances",
-  },
-  {
-    src: "/assets/gallery/cii event.jpeg",
-    alt: "Prakash Nathan at CII Event",
-    title: "CII Leadership Forum",
-    subtitle: "Keynote & Strategic Advisory",
-  },
-];
+import initialHomeSlides from "@/data/home-slides.json";
 
 /* ── Brand organisations list ── */
 const companies = [
@@ -104,6 +65,18 @@ const pillars = [
 
 export default function HomePage() {
   const particleRef = useRef<HTMLDivElement>(null);
+  const [slides, setSlides] = useState<CoverflowSlide[]>(initialHomeSlides as CoverflowSlide[]);
+
+  useEffect(() => {
+    fetch("/api/home-slides")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setSlides(data);
+        }
+      })
+      .catch((err) => console.error("Error fetching home slides:", err));
+  }, []);
 
   /* Spawn ambient particles */
   useEffect(() => {
@@ -424,7 +397,7 @@ export default function HomePage() {
             <div className="lg:col-span-5 relative flex justify-center items-center py-4">
               <div className="w-full max-w-sm sm:max-w-md overflow-visible">
                 <CoverflowCarousel
-                  slides={GALLERY_SLIDES}
+                  slides={slides}
                   showCaption
                   showPagination
                   showNavigation

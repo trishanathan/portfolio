@@ -3,64 +3,16 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import initialGalleryData from "@/data/gallery.json";
+
 interface GalleryItem {
+  id?: string;
   name: string;
   category: "Actors & Stars" | "Directors & Creators" | "Icons & Luminaries" | "Industry Events";
   src: string;
   note?: string;
+  createdAt?: string;
 }
-
-const galleryData: GalleryItem[] = [
-  { name: "Sachin Tendulkar", category: "Icons & Luminaries", src: "/assets/gallery/Sachin Tendulkar.png", note: "Cricket Legend" },
-  { name: "Aamir Khan", category: "Actors & Stars", src: "/assets/gallery/Amir Khan.png", note: "Iconic Bollywood Actor & Producer" },
-  { name: "Shahid Kapoor", category: "Actors & Stars", src: "/assets/gallery/Shahid Kapoor.jpeg", note: "Superstar Actor (Haider, Kaminey)" },
-  { name: "Rajkummar Rao", category: "Actors & Stars", src: "/assets/gallery/Rajkummar Rao.jpeg", note: "National Award-winning Actor (Shahid, Stree)" },
-  { name: "Vishal Bhardwaj", category: "Directors & Creators", src: "/assets/gallery/Vishal Bhardwaj.jpeg", note: "Acclaimed Director & Composer (Haider, Kaminey)" },
-  { name: "Ayan Mukerji", category: "Directors & Creators", src: "/assets/gallery/Ayan Mukerji.jpeg", note: "Director (Yeh Jawaani Hai Deewani, Wake Up Sid)" },
-  { name: "Jacqueline Fernandez & Salman Khan", category: "Actors & Stars", src: "/assets/gallery/Jacqueline Fernandez & Salman Khan.jpeg", note: "Kick Film Event & Interaction" },
-  { name: "Neil Nitin Mukesh", category: "Actors & Stars", src: "/assets/gallery/Neil Nitin Mukesh.jpeg", note: "Acclaimed Actor (Johnny Gaddaar)" },
-  { name: "Rajesh Roshan", category: "Icons & Luminaries", src: "/assets/gallery/Rajesh Roshan.jpeg", note: "Legendary Music Composer" },
-  { name: "Shraddha Kapoor", category: "Actors & Stars", src: "/assets/gallery/Shraddha Kapoor.png", note: "Leading Bollywood Actress" },
-  { name: "Rajkumar Hirani", category: "Directors & Creators", src: "/assets/gallery/Rajkumar Hirani.png", note: "Acclaimed Film Director (PK, 3 Idiots)" },
-  { name: "Kabir Khan", category: "Directors & Creators", src: "/assets/gallery/Kabir Khan.jpeg", note: "Director (Bajrangi Bhaijaan, 83)" },
-  { name: "Hansal Mehta", category: "Directors & Creators", src: "/assets/gallery/Hansal Mehta.jpeg", note: "National Award-winning Filmmaker (Shahid)" },
-  { name: "Prakash Jha", category: "Directors & Creators", src: "/assets/gallery/Prakash Jha.png", note: "Acclaimed Filmmaker & Director" },
-  { name: "Ashutosh Gowariker", category: "Directors & Creators", src: "/assets/gallery/Ashutosh Gowariker.png", note: "Academy Award Nominated Director" },
-  { name: "Abhishek Kapoor", category: "Directors & Creators", src: "/assets/gallery/Abhishek Kapoor.png", note: "Director (Kai Po Che!, Rock On!)" },
-  { name: "Mahesh Manjrekar", category: "Directors & Creators", src: "/assets/gallery/Mahesh Manjrekar.png", note: "Filmmaker & Veteran Actor" },
-  { name: "Nitin Kakkar", category: "Directors & Creators", src: "/assets/gallery/Nitin Kakkar.jpeg", note: "National Award-winning Director (Filmistaan)" },
-  { name: "Rajesh Mapuskar", category: "Directors & Creators", src: "/assets/gallery/Rajesh Mapuskar.png", note: "National Award-winning Director (Ventilator)" },
-  { name: "Kaizad Gustad", category: "Directors & Creators", src: "/assets/gallery/Kaizad Gustad.jpeg", note: "Filmmaker & Writer" },
-  { name: "Rakesh & Hrithik Roshan", category: "Industry Events", src: "/assets/gallery/Roshan se Roshan tak event- Rakesh & Rithik Roshan.png", note: "Roshan Se Roshan Tak Event" },
-  { name: "Carolina Marin", category: "Icons & Luminaries", src: "/assets/gallery/Carolina Marin.png", note: "Olympic Badminton Champion" },
-  { name: "Prithviraj Sukumaran", category: "Actors & Stars", src: "/assets/gallery/Prithviraj Sukumaran.png", note: "Superstar, Director & Producer" },
-  { name: "Govinda", category: "Actors & Stars", src: "/assets/gallery/Govinda.jpeg", note: "Legendary Bollywood Superstar" },
-  { name: "Om Puri", category: "Icons & Luminaries", src: "/assets/gallery/Om Puri.png", note: "Veteran Legend of World Cinema" },
-  { name: "Pratik Gandhi", category: "Actors & Stars", src: "/assets/gallery/Pratik Gandhi.jpeg", note: "Actor (Scam 1992)" },
-  { name: "Vir Das", category: "Actors & Stars", src: "/assets/gallery/Vir Das.png", note: "Emmy-winning Comedian & Actor" },
-  { name: "Ali Fazal, Richa Chadda & Amitosh Nagpal", category: "Actors & Stars", src: "/assets/gallery/Ali Fazal, Richa Chadda & Amitosh Nagpal.jpeg", note: "Premiere & Industry Interaction" },
-  { name: "Aditi Rao Hydari", category: "Actors & Stars", src: "/assets/gallery/Aditi Rao Hydari.png", note: "Acclaimed Actress" },
-  { name: "Sunny Leone", category: "Actors & Stars", src: "/assets/gallery/Sunny Leone 2.png", note: "Global Personality & Actress" },
-  { name: "Milind Soman", category: "Icons & Luminaries", src: "/assets/gallery/Milind Soman.jpeg", note: "Actor, Model & Ultramarathoner" },
-  { name: "Jaaved Jaaferi", category: "Actors & Stars", src: "/assets/gallery/Jaaved Jaaferi.png", note: "Veteran Actor & Performer" },
-  { name: "K K Menon", category: "Actors & Stars", src: "/assets/gallery/K K Menon.jpeg", note: "Masterclass Method Actor" },
-  { name: "Saurabh Shukla", category: "Actors & Stars", src: "/assets/gallery/Saurabh Shukla.jpeg", note: "National Award-winning Actor & Writer" },
-  { name: "Sanjay Mishra", category: "Actors & Stars", src: "/assets/gallery/Sanjay Mishra.jpeg", note: "Critically Acclaimed Veteran Actor" },
-  { name: "Dalip Tahil", category: "Actors & Stars", src: "/assets/gallery/Dalip Tahil.jpeg", note: "Distinguished Film & Theatre Actor" },
-  { name: "Amrita Puri", category: "Actors & Stars", src: "/assets/gallery/Amrita Puri.png", note: "Actress (Kai Po Che!, Aisha)" },
-  { name: "Neha Sharma", category: "Actors & Stars", src: "/assets/gallery/Neha Sharma.jpeg", note: "Actress & Fashion Icon" },
-  { name: "Nivetha Pethuraj", category: "Actors & Stars", src: "/assets/gallery/Nivetha Pethuraj.jpeg", note: "Leading South Indian Actress" },
-  { name: "Warina Hussain", category: "Actors & Stars", src: "/assets/gallery/Warina Hussain.jpeg", note: "Bollywood Actress" },
-  { name: "Gashmeer Mahajani", category: "Actors & Stars", src: "/assets/gallery/Gashmeer Mahajani.png", note: "Actor & Choreographer" },
-  { name: "Lauren Gottlieb", category: "Actors & Stars", src: "/assets/gallery/Lauren Gottlieb.png", note: "Dancer & Actress (ABCD)" },
-  { name: "Armaan Malik", category: "Actors & Stars", src: "/assets/gallery/Armaan Malik.png", note: "Award-winning Singer & Musician" },
-  { name: "Javed Ali", category: "Actors & Stars", src: "/assets/gallery/Javed Ali.jpeg", note: "Celebrated Playback Singer" },
-  { name: "Raima Sen", category: "Actors & Stars", src: "/assets/gallery/Raima Sen.png", note: "Acclaimed Film Actress" },
-  { name: "Raima Sen (Studio Event)", category: "Actors & Stars", src: "/assets/gallery/Raima Sen 2.jpeg", note: "Film Association & Event" },
-  { name: "Kunicka Sadanand", category: "Actors & Stars", src: "/assets/gallery/Kunicka Sadanand.jpeg", note: "Veteran Film & Television Actress" },
-  { name: "Industry Leadership Panel", category: "Industry Events", src: "/assets/gallery/Industry Leadership Highlight.jpeg", note: "Media & Entertainment Summit" },
-  { name: "CII Industry Leadership Event", category: "Industry Events", src: "/assets/gallery/cii event.jpeg", note: "Confederation of Indian Industry Summit" },
-];
 
 const categories = [
   "All",
@@ -71,20 +23,32 @@ const categories = [
 ] as const;
 
 export default function GalleryPage() {
+  const [items, setItems] = useState<GalleryItem[]>(initialGalleryData as GalleryItem[]);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  useEffect(() => {
+    fetch("/api/gallery")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setItems(data);
+        }
+      })
+      .catch((err) => console.error("Error fetching latest gallery:", err));
+  }, []);
+
   const filteredItems = useMemo(() => {
-    return galleryData.filter((item) => {
+    return items.filter((item) => {
       const matchCat = selectedCategory === "All" || item.category === selectedCategory;
       const matchSearch =
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (item.note && item.note.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchCat && matchSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [items, selectedCategory, searchQuery]);
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -182,8 +146,8 @@ export default function GalleryPage() {
               {categories.map((cat) => {
                 const count =
                   cat === "All"
-                    ? galleryData.length
-                    : galleryData.filter((item) => item.category === cat).length;
+                    ? items.length
+                    : items.filter((item) => item.category === cat).length;
                 const active = selectedCategory === cat;
 
                 return (
