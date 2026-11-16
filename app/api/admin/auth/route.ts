@@ -6,7 +6,8 @@ import { verifyTOTP } from "@/lib/totp";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { password, mfaCode } = body;
+    const password = (typeof body?.password === "string" ? body.password : "").trim();
+    const mfaCode = (typeof body?.mfaCode === "string" ? body.mfaCode : "").trim();
 
     // 1. Verify Password
     if (!password || !verifyAdminPassword(password)) {

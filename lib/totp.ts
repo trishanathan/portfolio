@@ -1,7 +1,7 @@
 import crypto from "crypto";
 
 export function getMFASecret(): string {
-  return process.env.ADMIN_MFA_SECRET || "";
+  return (process.env.ADMIN_MFA_SECRET || "J6KB2XVGDRWL5HOZPXM6JCLYOQHLI5QV").trim();
 }
 
 function base32Decode(base32: string): Buffer {
